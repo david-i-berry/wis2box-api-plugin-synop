@@ -39,14 +39,15 @@ LOGGER = logging.getLogger(__name__)
 
 PROCESS_METADATA = {
     'version': '0.1.0',
-    'id': 'process-synop',
+    'id': 'x-wmo:wis2box-synop-process',
     'title': 'Process and publish FM-12 SYNOP',
     'description': 'Converts the posted data to BUFR and publishes to specified topic',  # noqa
     'keywords': [],
     'links': [],
     'inputs': {
         'channel': {
-            'title': {'en': 'Channel / topic to publish on'},
+            'title': {'en': 'Channel'},
+            'description': {'en': 'Channel / topic to publish on'},
             'schema': {'type': 'string', 'default': None},
             'minOccurs': 1,
             'maxOccurs': 1,
@@ -54,7 +55,7 @@ PROCESS_METADATA = {
             'keywords': []
         },
         "data": {
-            "title": "FM 12-SYNOP bulletin string",
+            "title": "FM 12-SYNOP",
             "description": "Input FM 12-SYNOP bulletin to convert to BUFR.",
             "schema": {"type": "string"},
             "minOccurs": 1,
@@ -105,20 +106,20 @@ PROCESS_METADATA = {
 }
 
 # Get broker connection details
-BROKER_USERNAME = os.environ.get('WIS2BOX_BROKER_USERNAME') # opencdms
-BROKER_PASSWORD = os.environ.get('WIS2BOX_BROKER_PASSWORD') # insecure-change-me
-BROKER_HOST = os.environ.get('WIS2BOX_BROKER_HOST') # opencdms-broker
-BROKER_PORT = os.environ.get('WIS2BOX_BROKER_PORT') # 1883
-BROKER_PUBLIC = os.environ.get('WIS2BOX_BROKER_PUBLIC').rstrip('/') # 'public'
+BROKER_USERNAME = os.environ.get('WIS2BOX_BROKER_USERNAME')
+BROKER_PASSWORD = os.environ.get('WIS2BOX_BROKER_PASSWORD')
+BROKER_HOST = os.environ.get('WIS2BOX_BROKER_HOST')
+BROKER_PORT = os.environ.get('WIS2BOX_BROKER_PORT')
+BROKER_PUBLIC = os.environ.get('WIS2BOX_BROKER_PUBLIC').rstrip('/')
 
-DOCKER_API_URL = os.environ.get('WIS2BOX_DOCKER_API_URL') # unused?
-STORAGE_SOURCE = os.environ.get('WIS2BOX_STORAGE_SOURCE') # opencdms-bucket:9000
-STORAGE_USERNAME = os.environ.get('WIS2BOX_STORAGE_USERNAME') # opencdms
-STORAGE_PASSWORD = os.environ.get('WIS2BOX_STORAGE_PASSWORD') # insecure-change-me
-STORAGE_PUBLIC = os.environ.get('WIS2BOX_STORAGE_PUBLIC') # public
+DOCKER_API_URL = os.environ.get('WIS2BOX_DOCKER_API_URL')
+STORAGE_SOURCE = os.environ.get('WIS2BOX_STORAGE_SOURCE')
+STORAGE_USERNAME = os.environ.get('WIS2BOX_STORAGE_USERNAME')
+STORAGE_PASSWORD = os.environ.get('WIS2BOX_STORAGE_PASSWORD')
+STORAGE_PUBLIC = os.environ.get('WIS2BOX_STORAGE_PUBLIC')
 
 # API details
-API_URL = os.environ.get('WIS2BOX_API_URL').rstrip('/') # http://3.77.214.70/oapi/
+API_URL = os.environ.get('WIS2BOX_API_URL').rstrip('/')
 LOGGER.debug(API_URL)
 
 class submit(BaseProcessor):
@@ -141,11 +142,7 @@ class submit(BaseProcessor):
         :returns: 'application/json'
         """
 
-
         mimetype = 'application/json'
-        outputs = {
-        }
-
         errors = []
         bufr = []
         urls = []
@@ -174,7 +171,7 @@ class submit(BaseProcessor):
             # and add to single output object
             for result in bufr_generator:
                 bufr.append(result)
-                synop_converted +=1
+                synop_converted += 1
 
         except Exception as e:
             LOGGER.error(e)

@@ -1,6 +1,6 @@
 resources:
-  submit:
-    type: process
-    processor:
-      name: synop-form.submit
+    'x-wmo:wis2box-synop-process':
+      type: process
+      processor:
+        name: synopForm.submit
 

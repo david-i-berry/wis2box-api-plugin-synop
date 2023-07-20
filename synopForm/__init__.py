@@ -18,7 +18,7 @@
 # under the License.
 #
 ###############################################################################
-__version__ = "0.0.1"
+__version__ = "0.1.dev"
 
 import csv
 from datetime import datetime as dt

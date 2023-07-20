@@ -1,0 +1,2 @@
+pygeoapi
+requests

@@ -1,0 +1,6 @@
+resources:
+  submit:
+    type: process
+    processor:
+      name: synop-form.submit
+
